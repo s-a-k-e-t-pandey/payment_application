@@ -3,9 +3,10 @@ const { authMiddleware } = require('../authMiddleware');
 const {Account} = require("../db/userDb");
 const { default: mongoose } = require('mongoose');
 
-const router = express.Router();
+const AccRouter = express();
+AccRouter.use(express.json())
 
-router.get("/balance", authMiddleware, async (req, res)=>{
+AccRouter.get("/balance", authMiddleware, async (req, res)=>{
     const account = await Account.findOne({
         userId: req.userId
     }); 
@@ -17,7 +18,7 @@ router.get("/balance", authMiddleware, async (req, res)=>{
 });
 
 
-router.post("/transfer", authMiddleware, async (req, res)=>{
+AccRouter.post("/transfer", authMiddleware, async (req, res)=>{
     const session = await mongoose.startSession();
 
     session.startTransaction();
@@ -52,4 +53,4 @@ router.post("/transfer", authMiddleware, async (req, res)=>{
 
 })
 
-module.exports = router
+module.exports = AccRouter
